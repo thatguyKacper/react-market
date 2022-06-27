@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #f2f4f8;
@@ -17,6 +21,16 @@ body {
 .category,
 .explore {
   margin: 1rem;
+}
+@media (min-width: 1024px) {
+  .pageContainer,
+  .offers,
+  .profile,
+  .listingDetails,
+  .category,
+  .explore {
+    margin: 3rem;
+  }
 }
 
 .pageHeader {
@@ -33,6 +47,36 @@ a {
   text-decoration: none;
   display: block;
   color: #000000;
+}
+
+/* Spinner */
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingSpinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #00cc66 transparent #00cc66 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -159,6 +203,12 @@ a {
 .signUpText {
   cursor: pointer;
 }
+@media (min-width: 1024px) {
+  .signInBar,
+  .signUpBar {
+    justify-content: start;
+  }
+}
 
 .signInText,
 .signUpText {
@@ -175,6 +225,12 @@ a {
   height: 3rem;
   background-color: #00cc66;
   border-radius: 50%;
+}
+@media (min-width: 1024px) {
+  .signInButton,
+  .signUpButton {
+    margin-left: 3rem;
+  }
 }
 
 .registerLink {
