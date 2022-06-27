@@ -1,5 +1,13 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase.config';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
 
@@ -21,6 +29,36 @@ export default function Signup() {
     }));
   };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredentials.user;
+
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, 'users', user.uid), formDataCopy);
+
+      navigate('/');
+    } catch (error) {
+      toast.error('Something went wrong... Please try again');
+    }
+  };
+
   return (
     <>
       <div className='pageContainer'>
@@ -28,7 +66,7 @@ export default function Signup() {
           <p className='pageHeader'>Welcome!</p>
         </header>
 
-        <form>
+        <form onSubmit={onSubmit}>
           <input
             type='text'
             className='nameInput'
