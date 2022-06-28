@@ -24,7 +24,9 @@ export default function ListingItem({ listing, id }) {
           </p>
           <p className='categoryListingName'>{listing.brand}</p>
           <p className='categoryListingInfoText'>{listing.model}</p>
-          <p className='categoryListingPrice'>{listing.price}$</p>
+          <p className='categoryListingPrice'>
+            {listing.offer ? listing.discountPrice : listing.price}$
+          </p>
         </div>
       </Link>
     </li>
