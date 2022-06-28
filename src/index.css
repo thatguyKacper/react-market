@@ -409,11 +409,20 @@ a {
   }
 }
 
-.categoryListingLocation {
+.categoryListingInStock {
   font-weight: 600;
   font-size: 0.7rem;
   opacity: 0.8;
   margin-bottom: 0;
+  color: #00cc66;
+}
+
+.categoryListingNotAvailable {
+  font-weight: 600;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-bottom: 0;
+  color: #cc0000;
 }
 
 .categoryListingName {
