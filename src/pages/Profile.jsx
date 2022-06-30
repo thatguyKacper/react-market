@@ -95,11 +95,18 @@ export default function Profile() {
 
         {/* {console.log(auth.currentUser.metadata.createdAt)} */}
         {auth.currentUser.metadata.createdAt === '1656428823385' ? (
-          <Link to='/create-listing' className='createListing'>
-            <img src={homeIcon} alt='home' />
-            <p>Create listing</p>
-            <img src={arrowRight} alt='arrow right' />
-          </Link>
+          <>
+            <Link to='/create-listing' className='createListing'>
+              <img src={homeIcon} alt='home' />
+              <p>Create listing</p>
+              <img src={arrowRight} alt='arrow right' />
+            </Link>
+            <Link to='/create-news' className='createListing'>
+              <img src={homeIcon} alt='home' />
+              <p>Create news</p>
+              <img src={arrowRight} alt='arrow right' />
+            </Link>
+          </>
         ) : null}
       </main>
     </div>

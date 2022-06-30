@@ -3,6 +3,7 @@ import shoesCategoryImage from '../assets/img/eebec51f.jpeg';
 import hatsCategoryImage from '../assets/img/6e5630db.jpg';
 import sunglassesCategoryImage from '../assets/img/312272.jpeg';
 import othersCategoryImage from '../assets/img/7ff39960.jpeg';
+import Slider from '../component/Slider';
 
 export default function Explore() {
   return (
@@ -12,6 +13,8 @@ export default function Explore() {
       </header>
 
       <main>
+        <Slider />
+
         <p className='exploreCategoryHeading'>Categories</p>
         <div className='exploreCategories'>
           <Link to='/category/shoes'>

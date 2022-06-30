@@ -12,6 +12,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Navbar from './component/Navbar';
 import CreateListing from './pages/CreateListing';
 import Listing from './pages/Listing';
+import CreateNews from './pages/CreateNews';
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
           <Route path='/create-listing' element={<PrivateAdmin />}>
             <Route path='/create-listing' element={<CreateListing />}></Route>
+          </Route>
+          <Route path='/create-news' element={<PrivateAdmin />}>
+            <Route path='/create-news' element={<CreateNews />}></Route>
           </Route>
           <Route
             path='/category/:categoryName/:listingId'
