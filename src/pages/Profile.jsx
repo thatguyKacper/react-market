@@ -93,7 +93,8 @@ export default function Profile() {
           </form>
         </div>
 
-        {auth.currentUser.displayName === 'Admin' ? (
+        {/* {console.log(auth.currentUser.metadata.createdAt)} */}
+        {auth.currentUser.metadata.createdAt === '1656428823385' ? (
           <Link to='/create-listing' className='createListing'>
             <img src={homeIcon} alt='home' />
             <p>Create listing</p>

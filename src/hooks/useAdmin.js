@@ -9,7 +9,7 @@ export const useAdmin = () => {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (user.displayName === 'Admin') {
+      if (user.metadata.createdAt === '1656428823385') {
         setLoggedIn(true);
       }
       setCheckingStatus(false);
