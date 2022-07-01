@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 import Spinner from '../component/Spinner';
@@ -8,6 +8,9 @@ import shareIcon from '../assets/svg/shareIcon.svg';
 import { Navigation, Pagination, A11y, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/bundle';
+import editIcon from '../assets/svg/editIcon.svg';
+import { ReactComponent as DeleteIcon } from '../assets/svg/deleteIcon.svg';
+import { toast } from 'react-toastify';
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -31,6 +34,18 @@ export default function Listing() {
     };
     fetchListing();
   }, [navigate, params.listingId]);
+
+  const onDelete = async () => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete listing: ${listing.brand} - ${listing.model}?`
+      )
+    ) {
+      await deleteDoc(doc(db, 'listings', params.listingId));
+      toast.success('Listing deleted');
+    }
+    navigate(`/category/${listing.type}`);
+  };
 
   if (loading) {
     return <Spinner />;
@@ -88,20 +103,34 @@ export default function Listing() {
           </p>
         )}
 
-        <ul className='listingDetailsList'>
+        {/* <ul className='listingDetailsList'>
           <li>{listing.model}</li>
           <ul className='listingDetailsListSize'>
             {listing.size.map((size) => (
               <li key={size}>{size}</li>
             ))}
           </ul>
-        </ul>
+        </ul> */}
 
         {listing.inStock && auth.currentUser && (
           <Link to='/cart' className='primaryButton'>
             Add To Cart
           </Link>
         )}
+
+        {auth.currentUser &&
+          auth.currentUser.metadata.createdAt === '1656428823385' && (
+            <>
+              <div className='listingIcons'>
+                <Link to='/edit-listing' className='createListing'>
+                  <img src={editIcon} alt='edit' />
+                </Link>
+                <div className='createListing'>
+                  <DeleteIcon fill='#cc0000' onClick={onDelete} />
+                </div>
+              </div>
+            </>
+          )}
       </div>
     </main>
   );

@@ -28,7 +28,7 @@ export default function Slider() {
         });
       });
 
-      console.log(news);
+      // console.log(news);
       setNews(news);
     };
     fetchNews();

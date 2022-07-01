@@ -13,6 +13,7 @@ import Navbar from './component/Navbar';
 import CreateListing from './pages/CreateListing';
 import Listing from './pages/Listing';
 import CreateNews from './pages/CreateNews';
+import EditListing from './pages/EditListing';
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route path='/create-news' element={<PrivateAdmin />}>
             <Route path='/create-news' element={<CreateNews />}></Route>
+          </Route>
+          <Route path='/edit-listing' element={<PrivateAdmin />}>
+            <Route path='/edit-listing' element={<EditListing />}></Route>
           </Route>
           <Route
             path='/category/:categoryName/:listingId'

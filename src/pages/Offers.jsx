@@ -17,6 +17,7 @@ import ListingItem from './ListingItem';
 export default function Offers() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
   const params = useParams();
 
@@ -33,6 +34,9 @@ export default function Offers() {
         );
 
         const querySnap = await getDocs(q);
+
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+        setLastFetchedListing(lastVisible);
 
         let listings = [];
 
@@ -52,6 +56,40 @@ export default function Offers() {
     };
     fetchListings();
   }, []);
+
+  const onFetchMoreListings = async () => {
+    try {
+      const listingsRef = collection(db, 'listings');
+
+      const q = query(
+        listingsRef,
+        where('offer', '==', true),
+        orderBy('timestamp', 'desc'),
+        limit(10),
+        startAfter(lastFetchedListing)
+      );
+
+      const querySnap = await getDocs(q);
+
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+      setLastFetchedListing(lastVisible);
+
+      let listings = [];
+
+      querySnap.forEach((doc) => {
+        // console.log(doc.data());
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
+
+      setListings((prevState) => [...prevState, ...listings]);
+      setLoading(false);
+    } catch (error) {
+      toast.error('Could not fetch listings');
+    }
+  };
 
   return (
     <div className='category'>
@@ -75,6 +113,11 @@ export default function Offers() {
               ))}
             </ul>
           </main>
+          {lastFetchedListing && (
+            <p className='loadMore' onClick={onFetchMoreListings}>
+              Load More
+            </p>
+          )}
         </>
       ) : (
         <p>No special offers</p>

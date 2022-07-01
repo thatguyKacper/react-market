@@ -172,7 +172,6 @@ export default function CreateListing() {
             type='text'
             id='size'
             value={size}
-            required
             onChange={onChange}
             placeholder='seperated with " , "'
           />

@@ -10,5 +10,5 @@ React market is online store built in mobile first approach. It uses Firebase on
 # Accounts
 
 - you can create your own account with custom name, email and password!
-- use **user@test.io** for regular user account
-- or **admin@test.io** for admin panel features
+- use **user@test.io** for regular user account |password **test1234**
+- or **admin@test.io** for admin panel features |password **test1234**
