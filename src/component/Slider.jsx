@@ -5,10 +5,13 @@ import { db } from '../firebase.config';
 import { Navigation, Pagination, A11y, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/bundle';
+import { getAuth } from 'firebase/auth';
+import editIcon from '../assets/svg/editIcon.svg';
 
 export default function Slider() {
   const [news, setNews] = useState(null);
 
+  const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,8 +49,20 @@ export default function Slider() {
           navigation
         >
           {news.map(({ data, id }) => (
-            <SwiperSlide key={id} onClick={() => navigate(`/${data.slug}`)}>
+            <SwiperSlide key={id}>
+              {auth.currentUser &&
+                auth.currentUser.metadata.createdAt === '1656428823385' && (
+                  <div
+                    className='shareIconDiv'
+                    onClick={() => {
+                      navigate(`/edit-news/${id}`);
+                    }}
+                  >
+                    <img src={editIcon} alt='' />
+                  </div>
+                )}
               <div
+                onClick={() => navigate(`/${data.slug}`)}
                 style={{
                   backgroundImage: `url(${data.imgUrl})`,
                   backgroundPosition: 'center',

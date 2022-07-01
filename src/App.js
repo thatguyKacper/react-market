@@ -14,6 +14,7 @@ import CreateListing from './pages/CreateListing';
 import Listing from './pages/Listing';
 import CreateNews from './pages/CreateNews';
 import EditListing from './pages/EditListing';
+import EditNews from './pages/EditNews';
 
 function App() {
   return (
@@ -35,8 +36,14 @@ function App() {
           <Route path='/create-news' element={<PrivateAdmin />}>
             <Route path='/create-news' element={<CreateNews />}></Route>
           </Route>
-          <Route path='/edit-listing' element={<PrivateAdmin />}>
-            <Route path='/edit-listing' element={<EditListing />}></Route>
+          <Route path='/edit-listing/:listingId' element={<PrivateAdmin />}>
+            <Route
+              path='/edit-listing/:listingId'
+              element={<EditListing />}
+            ></Route>
+          </Route>
+          <Route path='/edit-news/:newsId' element={<PrivateAdmin />}>
+            <Route path='/edit-news/:newsId' element={<EditNews />}></Route>
           </Route>
           <Route
             path='/category/:categoryName/:listingId'

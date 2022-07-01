@@ -25,8 +25,7 @@ export default function CreateListing() {
     description: '',
   });
 
-  const { type, brand, model, inStock, price, size, images, description } =
-    formData;
+  const { brand, model, inStock, price, size, images, description } = formData;
 
   const navigate = useNavigate();
 

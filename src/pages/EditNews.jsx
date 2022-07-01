@@ -1,19 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { updateDoc, getDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { v4 as uuidv4 } from 'uuid';
 import Spinner from '../component/Spinner';
 import { toast } from 'react-toastify';
 
-export default function CreateNews() {
+export default function EditNews() {
   const [loading, setLoading] = useState(false);
+  const [news, setNews] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -24,6 +25,27 @@ export default function CreateNews() {
   const { name, description, slug, image } = formData;
 
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    setLoading(true);
+
+    const fetchListing = async () => {
+      const docRef = doc(db, 'news', params.newsId);
+
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setNews(docSnap.data());
+        setFormData({ ...docSnap.data() });
+        setLoading(false);
+      } else {
+        navigate('/');
+        toast.error('News does not exist');
+      }
+    };
+    fetchListing();
+  }, [navigate, params.newsId]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +95,9 @@ export default function CreateNews() {
 
     delete formDataCopy.image;
 
-    const docRef = await addDoc(collection(db, 'news'), formDataCopy);
+    const docRef = doc(db, 'news', params.newsId);
+
+    await updateDoc(docRef, formDataCopy);
 
     setLoading(false);
 
@@ -105,7 +129,7 @@ export default function CreateNews() {
   return (
     <div className='profile'>
       <header>
-        <p className='pageHeader'>Create News</p>
+        <p className='pageHeader'>Edit News</p>
       </header>
 
       <main>
@@ -151,7 +175,7 @@ export default function CreateNews() {
             onChange={onChange}
           />
           <button type='submit' className='primaryButton createListingButton'>
-            Create News
+            Edit News
           </button>
         </form>
       </main>

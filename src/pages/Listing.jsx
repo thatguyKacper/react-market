@@ -122,7 +122,10 @@ export default function Listing() {
           auth.currentUser.metadata.createdAt === '1656428823385' && (
             <>
               <div className='listingIcons'>
-                <Link to='/edit-listing' className='createListing'>
+                <Link
+                  to={`/edit-listing/${params.listingId}`}
+                  className='createListing'
+                >
                   <img src={editIcon} alt='edit' />
                 </Link>
                 <div className='createListing'>
