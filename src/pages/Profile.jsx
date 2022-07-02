@@ -6,6 +6,107 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg';
 import homeIcon from '../assets/svg/homeIcon.svg';
+import styled from 'styled-components';
+
+const ProfileWrapper = styled.div`
+  margin-bottom: 10rem;
+  margin: 1rem;
+  margin-bottom: 10rem;
+
+  @media (min-width: 1024px) {
+    margin: 3rem;
+  }
+`;
+const ProfileHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const PageHeader = styled.p`
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
+const LogoutBtn = styled.button`
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #00cc66;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+`;
+
+const ProfileDetailsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  max-width: 500px;
+`;
+
+const ProfileDetailsText = styled.p`
+  font-weight: 600;
+`;
+
+const ChangePersonalDetails = styled.p`
+  cursor: pointer;
+  font-weight: 600;
+  color: #00cc66;
+`;
+
+const ProfileCard = styled.div`
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+`;
+
+const ProfileInput = styled.input`
+  box-shadow: rgba(0, 0, 0, 0.11);
+  border: none;
+  background: #ffffff;
+  border-radius: 3rem;
+  height: 3rem;
+  width: 100%;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0 3rem;
+  font-size: 1rem;
+
+  @media (min-width: 1100px) {
+    padding: 0 5rem;
+  }
+`;
+
+const ProfileName = styled(ProfileInput)`
+  all: unset;
+  margin: 0.3rem 0;
+  font-weight: 600;
+  width: 100%;
+`;
+
+const ProfileEmail = styled(ProfileName)`
+  font-weight: 500;
+`;
+
+const ProfileFieldActive = styled(ProfileName)`
+  background-color: rgba(44, 44, 44, 0.1);
+`;
+
+const CreateListing = styled(Link)`
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
+  box-shadow: rgba(0, 0, 0, 0.2);
+  margin-top: 2rem;
+  font-weight: 600;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 export default function Profile() {
   const auth = getAuth();
@@ -50,65 +151,83 @@ export default function Profile() {
   };
 
   return (
-    <div className='profile'>
-      <header className='profileHeader'>
-        <p className='pageHeader'>My Profile</p>
-        <button type='button' className='logOut' onClick={logOut}>
+    <ProfileWrapper>
+      <ProfileHeader>
+        <PageHeader>My Profile</PageHeader>
+        <LogoutBtn type='button' onClick={logOut}>
           Logout
-        </button>
-      </header>
+        </LogoutBtn>
+      </ProfileHeader>
 
       <main>
-        <div className='profileDetailsHeader'>
-          <p className='profileDetailsText'>Personal Details</p>
-          <p
-            className='changePersonalDetails'
+        <ProfileDetailsHeader>
+          <ProfileDetailsText>Personal Details</ProfileDetailsText>
+          <ChangePersonalDetails
             onClick={() => {
               changeDetails && onSubmit();
               setChangeDetails((prevState) => !prevState);
             }}
           >
             {changeDetails ? 'done' : 'change'}
-          </p>
-        </div>
+          </ChangePersonalDetails>
+        </ProfileDetailsHeader>
 
-        <div className='profileCard'>
+        <ProfileCard>
           <form>
-            <input
-              type='text'
-              id='name'
-              className={!changeDetails ? 'profileName' : 'profileNameActive'}
-              disabled={!changeDetails}
-              value={name}
-              onChange={onChange}
-            />
-            <input
-              type='text'
-              id='email'
-              className={!changeDetails ? 'profileEmail' : 'profileEmailActive'}
-              disabled={!changeDetails}
-              value={email}
-              onChange={onChange}
-            />
+            {!changeDetails ? (
+              <ProfileName
+                type='text'
+                id='name'
+                disabled={!changeDetails}
+                value={name}
+                onChange={onChange}
+              />
+            ) : (
+              <ProfileFieldActive
+                type='text'
+                id='name'
+                disabled={!changeDetails}
+                value={name}
+                onChange={onChange}
+              />
+            )}
+            {!changeDetails ? (
+              <ProfileEmail
+                type='text'
+                id='email'
+                disabled={!changeDetails}
+                value={email}
+                onChange={onChange}
+              />
+            ) : (
+              <ProfileFieldActive
+                type='text'
+                id='email'
+                disabled={!changeDetails}
+                value={email}
+                onChange={onChange}
+              />
+            )}
           </form>
-        </div>
+        </ProfileCard>
 
-        {/* {console.log(auth.currentUser.metadata.createdAt)} */}
         {auth.currentUser.metadata.createdAt === '1656428823385' ? (
           <>
-            <Link to='/create-listing' className='createListing'>
+            <CreateListing to='/create-listing'>
               <img src={homeIcon} alt='home' />
               <p>Create listing</p>
               <img src={arrowRight} alt='arrow right' />
-            </Link>
-            <Link to='/create-news' className='createListing'>
+            </CreateListing>
+            <CreateListing to='/create-news'>
               <img src={homeIcon} alt='home' />
               <p>Create news</p>
               <img src={arrowRight} alt='arrow right' />
-            </Link>
+            </CreateListing>
           </>
-        ) : null}
+        ) : (
+          <></>
+        )}
       </main>
-    </div>
+    </ProfileWrapper>
   );
 }

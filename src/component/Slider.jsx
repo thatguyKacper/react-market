@@ -7,6 +7,59 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/bundle';
 import { getAuth } from 'firebase/auth';
 import editIcon from '../assets/svg/editIcon.svg';
+import styled from 'styled-components';
+
+const ExploreHeading = styled.p`
+  font-weight: 700;
+`;
+
+const EditIconDiv = styled.div`
+  cursor: pointer;
+  position: fixed;
+  top: 3%;
+  right: 1%;
+  z-index: 2;
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SwiperSlideText = styled.p`
+  color: #ffffff;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  font-weight: 600;
+  max-width: 90%;
+  font-size: 1.25rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem;
+
+  @media (min-width: 1024px) {
+    font-size: 1.75rem;
+  }
+`;
+
+const SwiperSlideButton = styled.p`
+  color: #000000;
+  position: absolute;
+  top: 143px;
+  left: 11px;
+  font-weight: 600;
+  max-width: 90%;
+  background-color: #ffffff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  }
+  @media (min-width: 1024px) {
+    font-size: 1.25rem;
+  }
+`;
 
 export default function Slider() {
   const [news, setNews] = useState(null);
@@ -31,7 +84,6 @@ export default function Slider() {
         });
       });
 
-      // console.log(news);
       setNews(news);
     };
     fetchNews();
@@ -40,7 +92,7 @@ export default function Slider() {
   return (
     news && (
       <>
-        <p className='exploreHeading'>News</p>
+        <ExploreHeading>News</ExploreHeading>
 
         <Swiper
           modules={[Navigation, Pagination, A11y, Autoplay]}
@@ -52,17 +104,15 @@ export default function Slider() {
             <SwiperSlide key={id}>
               {auth.currentUser &&
                 auth.currentUser.metadata.createdAt === '1656428823385' && (
-                  <div
-                    className='shareIconDiv'
+                  <EditIconDiv
                     onClick={() => {
                       navigate(`/edit-news/${id}`);
                     }}
                   >
                     <img src={editIcon} alt='' />
-                  </div>
+                  </EditIconDiv>
                 )}
               <div
-                onClick={() => navigate(`/${data.slug}`)}
                 style={{
                   backgroundImage: `url(${data.imgUrl})`,
                   backgroundPosition: 'center',
@@ -71,11 +121,15 @@ export default function Slider() {
                 }}
                 className='swiper-slide'
               >
-                <p className='swiperSlideText'>{data.name}</p>
+                <SwiperSlideText>{data.name}</SwiperSlideText>
 
                 {data.description ? (
-                  <p className='swiperSlidePrice'>{data.description}</p>
-                ) : null}
+                  <SwiperSlideButton onClick={() => navigate(`/${data.slug}`)}>
+                    More
+                  </SwiperSlideButton>
+                ) : (
+                  <></>
+                )}
               </div>
             </SwiperSlide>
           ))}

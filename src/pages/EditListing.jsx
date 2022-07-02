@@ -11,6 +11,124 @@ import { db } from '../firebase.config';
 import { v4 as uuidv4 } from 'uuid';
 import Spinner from '../component/Spinner';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
+
+const EditListingWrapper = styled.div`
+  margin: 1rem;
+  margin-bottom: 10rem;
+
+  @media (min-width: 1024px) {
+    margin: 3rem;
+  }
+`;
+
+const PageHeader = styled.p`
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
+// const Form = styled;
+
+const FormLabel = styled.label`
+  font-weight: 600;
+  margin-top: 1rem;
+  display: block;
+`;
+
+const FormSelect = styled.select`
+  padding: 0.9rem 3rem;
+  background-color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.5rem 0 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  max-width: 326px;
+`;
+
+const EditListingInput = styled.input`
+  box-shadow: rgba(0, 0, 0, 0.11);
+  background: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  height: 3rem;
+  max-width: 326px;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.9rem 3rem;
+`;
+
+const FormInputTextarea = styled.textarea`
+  box-shadow: rgba(0, 0, 0, 0.11);
+  background: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  height: 3rem;
+  max-width: 326px;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.9rem 3rem;
+`;
+
+const FormButtonsDiv = styled.div`
+  display: flex;
+`;
+
+const FormButton = styled.button`
+  padding: 0.9rem 3rem;
+  background-color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.5rem 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FormButtonActive = styled(FormButton)`
+  background-color: #00cc66;
+  color: #ffffff;
+`;
+
+const ImagesInfo = styled.p`
+  font-size: 0.9rem;
+  opacity: 0.75;
+`;
+
+const FormInputFile = styled.input`
+  &::-webkit-file-upload-button {
+    background-color: #00cc66;
+    border: none;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+`;
+
+const EditListingButton = styled(FormButton)`
+  cursor: pointer;
+  background: #00cc66;
+  padding: 0.85rem 2rem;
+  color: #ffffff;
+  font-size: 1.25rem;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 2rem;
+`;
 
 export default function EditListing() {
   const [loading, setLoading] = useState(false);
@@ -26,7 +144,7 @@ export default function EditListing() {
     description: '',
   });
 
-  const { brand, model, inStock, price, size, images, description } = formData;
+  const { brand, model, inStock, price, images, description } = formData;
 
   const navigate = useNavigate();
   const params = useParams();
@@ -89,8 +207,6 @@ export default function EditListing() {
       return;
     });
 
-    // console.log(imgUrls);
-
     const formDataCopy = {
       ...formData,
       imgUrls,
@@ -131,23 +247,22 @@ export default function EditListing() {
   }
 
   return (
-    <div className='profile'>
+    <EditListingWrapper>
       <header>
-        <p className='pageHeader'>Edit Listing</p>
+        <PageHeader>Edit Listing</PageHeader>
       </header>
 
       <main>
         <form onSubmit={onSubmit}>
-          <label className='formLabel'>Category</label>
-          <select className='formInputSelect' id='type' onChange={onChange}>
+          <FormLabel>Category</FormLabel>
+          <FormSelect id='type' onChange={onChange}>
             <option value='shoes'>Shoes</option>
             <option value='hats'>Hats</option>
             <option value='sunglasses'>Sunglasses</option>
             <option value='others'>Others</option>
-          </select>
-          <label className='formLabel'>Brand</label>
-          <input
-            className='formInputName'
+          </FormSelect>
+          <FormLabel>Brand</FormLabel>
+          <EditListingInput
             type='text'
             id='brand'
             value={brand}
@@ -156,9 +271,8 @@ export default function EditListing() {
             required
             onChange={onChange}
           />
-          <label className='formLabel'>Model</label>
-          <input
-            className='formInputName'
+          <FormLabel>Model</FormLabel>
+          <EditListingInput
             type='text'
             id='model'
             value={model}
@@ -167,10 +281,9 @@ export default function EditListing() {
             required
             onChange={onChange}
           />
-          <label className='formLabel'>Price</label>
+          <FormLabel>Price</FormLabel>
           <div className='formPriceDiv'>
-            <input
-              className='formInputSmall'
+            <EditListingInput
               type='number'
               id='price'
               value={price}
@@ -180,61 +293,67 @@ export default function EditListing() {
               onChange={onChange}
             />
           </div>
-          <label className='formLabel'>Description</label>
-          <textarea
-            className='formInputDescription'
+          <FormLabel>Description</FormLabel>
+          <FormInputTextarea
             type='text'
             id='description'
             value={description}
             onChange={onChange}
           />
-          <label className='formLabel'>Sizes</label>
-          <input
-            className='formInputName'
-            type='text'
-            id='size'
-            value={size}
-            onChange={onChange}
-            placeholder='seperated with " , "'
-          />
-          <label className='formLabel'>In Stock</label>
-          <div className='formButtons'>
-            <button
-              type='button'
-              className={inStock === 'true' ? 'formButtonActive' : 'formButton'}
-              id='inStock'
-              value='true'
-              onClick={onChange}
-            >
-              Yes
-            </button>
-            <button
-              type='button'
-              className={
-                inStock === 'false' ? 'formButtonActive' : 'formButton'
-              }
-              id='inStock'
-              value='false'
-              onClick={onChange}
-            >
-              No
-            </button>
-          </div>
-          <label className='formLabel'>Images</label>
-          <p className='imagesInfo'>The first image will be the cover.</p>
-          <input
-            className='formInputFile'
+          <FormLabel>In Stock</FormLabel>
+          <FormButtonsDiv>
+            {inStock === 'true' ? (
+              <FormButtonActive
+                type='button'
+                id='inStock'
+                value='true'
+                onClick={onChange}
+              >
+                Yes
+              </FormButtonActive>
+            ) : (
+              <FormButton
+                type='button'
+                id='inStock'
+                value='true'
+                onClick={onChange}
+              >
+                Yes
+              </FormButton>
+            )}
+
+            {inStock === 'false' ? (
+              <FormButtonActive
+                type='button'
+                id='inStock'
+                value='false'
+                onClick={onChange}
+              >
+                No
+              </FormButtonActive>
+            ) : (
+              <FormButton
+                type='button'
+                id='inStock'
+                value='false'
+                onClick={onChange}
+              >
+                No
+              </FormButton>
+            )}
+          </FormButtonsDiv>
+          <FormLabel>Images</FormLabel>
+          <ImagesInfo>The first image will be the cover.</ImagesInfo>
+          <FormInputFile
             type='file'
             id='images'
             accept='.jpg,.png,.jpeg'
             multiple
             onChange={onChange}
           />
-          <button type='submit' className='primaryButton createListingButton'>
-            Edit Listing
-          </button>
+          <EditListingButton type='submit'>Edit Listing</EditListingButton>
         </form>
       </main>
-    </div>
+    </EditListingWrapper>
   );
 }

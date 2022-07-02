@@ -15,10 +15,41 @@ import Listing from './pages/Listing';
 import CreateNews from './pages/CreateNews';
 import EditListing from './pages/EditListing';
 import EditNews from './pages/EditNews';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f2f4f8;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    color: #000000;
+  }
+`;
 
 function App() {
   return (
     <>
+      <GlobalStyle />
       <Router>
         <Routes>
           <Route path='/' element={<Explore />}></Route>

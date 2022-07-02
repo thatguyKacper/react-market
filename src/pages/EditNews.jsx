@@ -11,6 +11,84 @@ import { db } from '../firebase.config';
 import { v4 as uuidv4 } from 'uuid';
 import Spinner from '../component/Spinner';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
+
+const EditNewsWrapper = styled.div`
+  margin: 1rem;
+  margin-bottom: 10rem;
+
+  @media (min-width: 1024px) {
+    margin: 3rem;
+  }
+`;
+
+const PageHeader = styled.p`
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
+const FormLabel = styled.label`
+  font-weight: 600;
+  margin-top: 1rem;
+  display: block;
+`;
+
+const EditNewsInput = styled.input`
+  box-shadow: rgba(0, 0, 0, 0.11);
+  background: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  height: 3rem;
+  max-width: 326px;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.9rem 3rem;
+`;
+
+const FormButton = styled.button`
+  padding: 0.9rem 3rem;
+  background-color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.5rem 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ImagesInfo = styled.p`
+  font-size: 0.9rem;
+  opacity: 0.75;
+`;
+
+const FormInputFile = styled.input`
+  &::-webkit-file-upload-button {
+    background-color: #00cc66;
+    border: none;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+`;
+
+const EditNewsButton = styled(FormButton)`
+  cursor: pointer;
+  background: #00cc66;
+  padding: 0.85rem 2rem;
+  color: #ffffff;
+  font-size: 1.25rem;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 2rem;
+`;
 
 export default function EditNews() {
   const [loading, setLoading] = useState(false);
@@ -127,16 +205,15 @@ export default function EditNews() {
   }
 
   return (
-    <div className='profile'>
+    <EditNewsWrapper>
       <header>
-        <p className='pageHeader'>Edit News</p>
+        <PageHeader>Edit News</PageHeader>
       </header>
 
       <main>
         <form onSubmit={onSubmit}>
-          <label className='formLabel'>Name</label>
-          <input
-            className='formInputName'
+          <FormLabel>Name</FormLabel>
+          <EditNewsInput
             type='text'
             id='name'
             value={name}
@@ -145,9 +222,8 @@ export default function EditNews() {
             required
             onChange={onChange}
           />
-          <label className='formLabel'>Description</label>
-          <input
-            className='formInputName'
+          <FormLabel>Description</FormLabel>
+          <EditNewsInput
             type='text'
             id='description'
             value={description}
@@ -156,29 +232,26 @@ export default function EditNews() {
             required
             onChange={onChange}
           />
-          <label className='formLabel'>Slug</label>
-          <input
-            className='formInputName'
+          <FormLabel>Slug</FormLabel>
+          <EditNewsInput
             type='text'
             id='slug'
             value={slug}
             required
             onChange={onChange}
           />
-          <label className='formLabel'>Image</label>
-          <input
-            className='formInputFile'
+          <FormLabel>Image</FormLabel>
+          <ImagesInfo>Only one image available</ImagesInfo>
+          <FormInputFile
             type='file'
             id='image'
             accept='.jpg,.png,.jpeg'
             required
             onChange={onChange}
           />
-          <button type='submit' className='primaryButton createListingButton'>
-            Edit News
-          </button>
+          <EditNewsButton type='submit'>Edit News</EditNewsButton>
         </form>
       </main>
-    </div>
+    </EditNewsWrapper>
   );
 }

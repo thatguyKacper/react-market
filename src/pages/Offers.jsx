@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   collection,
   getDocs,
@@ -13,13 +12,48 @@ import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
 import Spinner from '../component/Spinner';
 import ListingItem from './ListingItem';
+import styled from 'styled-components';
+
+const CategoryWrapper = styled.div`
+  margin: 1rem;
+  margin-bottom: 10rem;
+
+  @media (min-width: 1024px) {
+    margin: 3rem;
+  }
+`;
+
+const PageHeader = styled.p`
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
+const CategoryListings = styled.ul`
+  padding: 0;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+const LoadMore = styled.p`
+  cursor: pointer;
+  width: 8rem;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  opacity: 0.7;
+  margin-top: 2rem;
+`;
 
 export default function Offers() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
-
-  const params = useParams();
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -92,9 +126,9 @@ export default function Offers() {
   };
 
   return (
-    <div className='category'>
+    <CategoryWrapper>
       <header>
-        <p className='pageHeader'>Offers</p>
+        <PageHeader>Offers</PageHeader>
       </header>
 
       {loading ? (
@@ -102,7 +136,7 @@ export default function Offers() {
       ) : listings && listings.length > 0 ? (
         <>
           <main>
-            <ul className='categoryListings'>
+            <CategoryListings>
               {listings.map((listing) => (
                 // console.log(listing.data)
                 <ListingItem
@@ -111,17 +145,15 @@ export default function Offers() {
                   key={listing.id}
                 />
               ))}
-            </ul>
+            </CategoryListings>
           </main>
           {lastFetchedListing && (
-            <p className='loadMore' onClick={onFetchMoreListings}>
-              Load More
-            </p>
+            <LoadMore onClick={onFetchMoreListings}>Load More</LoadMore>
           )}
         </>
       ) : (
         <p>No special offers</p>
       )}
-    </div>
+    </CategoryWrapper>
   );
 }

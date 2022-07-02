@@ -13,6 +13,44 @@ import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
 import Spinner from '../component/Spinner';
 import ListingItem from './ListingItem';
+import styled from 'styled-components';
+
+const CategoryWrapper = styled.div`
+  margin: 1rem;
+  margin-bottom: 10rem;
+
+  @media (min-width: 1024px) {
+    margin: 3rem;
+  }
+`;
+
+const PageHeader = styled.p`
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
+const CategoryListings = styled.ul`
+  padding: 0;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+const LoadMore = styled.p`
+  cursor: pointer;
+  width: 8rem;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  opacity: 0.7;
+  margin-top: 2rem;
+`;
 
 export default function Category() {
   const [listings, setListings] = useState(null);
@@ -92,9 +130,9 @@ export default function Category() {
   };
 
   return (
-    <div className='category'>
+    <CategoryWrapper>
       <header>
-        <p className='pageHeader'>{params.categoryName}</p>
+        <PageHeader>{params.categoryName}</PageHeader>
       </header>
 
       {loading ? (
@@ -102,26 +140,23 @@ export default function Category() {
       ) : listings && listings.length > 0 ? (
         <>
           <main>
-            <ul className='categoryListings'>
+            <CategoryListings>
               {listings.map((listing) => (
-                // console.log(listing.data)
                 <ListingItem
                   listing={listing.data}
                   id={listing.id}
                   key={listing.id}
                 />
               ))}
-            </ul>
+            </CategoryListings>
           </main>
           {lastFetchedListing && (
-            <p className='loadMore' onClick={onFetchMoreListings}>
-              Load More
-            </p>
+            <LoadMore onClick={onFetchMoreListings}>Load More</LoadMore>
           )}
         </>
       ) : (
         <p>No listings for {params.categoryName}</p>
       )}
-    </div>
+    </CategoryWrapper>
   );
 }
