@@ -53,7 +53,7 @@ const LoadMore = styled.p`
 `;
 
 export default function Category() {
-  const [listings, setListings] = useState(null);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
@@ -62,10 +62,10 @@ export default function Category() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const listingsRef = collection(db, 'listings');
+        const productsRef = collection(db, 'products');
 
         const q = query(
-          listingsRef,
+          productsRef,
           where('type', '==', params.categoryName),
           orderBy('timestamp', 'desc'),
           limit(10)
@@ -76,20 +76,20 @@ export default function Category() {
         const lastVisible = querySnap.docs[querySnap.docs.length - 1];
         setLastFetchedListing(lastVisible);
 
-        let listings = [];
+        let products = [];
 
         querySnap.forEach((doc) => {
           // console.log(doc.data());
-          return listings.push({
+          return products.push({
             id: doc.id,
             data: doc.data(),
           });
         });
 
-        setListings(listings);
+        setProducts(products);
         setLoading(false);
       } catch (error) {
-        toast.error('Could not fetch listings');
+        toast.error('Could not fetch products');
       }
     };
     fetchListings();
@@ -97,10 +97,10 @@ export default function Category() {
 
   const onFetchMoreListings = async () => {
     try {
-      const listingsRef = collection(db, 'listings');
+      const productsRef = collection(db, 'products');
 
       const q = query(
-        listingsRef,
+        productsRef,
         where('type', '==', params.categoryName),
         orderBy('timestamp', 'desc'),
         limit(10),
@@ -112,20 +112,20 @@ export default function Category() {
       const lastVisible = querySnap.docs[querySnap.docs.length - 1];
       setLastFetchedListing(lastVisible);
 
-      let listings = [];
+      let products = [];
 
       querySnap.forEach((doc) => {
         // console.log(doc.data());
-        return listings.push({
+        return products.push({
           id: doc.id,
           data: doc.data(),
         });
       });
 
-      setListings((prevState) => [...prevState, ...listings]);
+      setProducts((prevState) => [...prevState, ...products]);
       setLoading(false);
     } catch (error) {
-      toast.error('Could not fetch listings');
+      toast.error('Could not fetch products');
     }
   };
 
@@ -137,15 +137,15 @@ export default function Category() {
 
       {loading ? (
         <Spinner />
-      ) : listings && listings.length > 0 ? (
+      ) : products && products.length > 0 ? (
         <>
           <main>
             <CategoryListings>
-              {listings.map((listing) => (
+              {products.map((product) => (
                 <ListingItem
-                  listing={listing.data}
-                  id={listing.id}
-                  key={listing.id}
+                  product={product.data}
+                  id={product.id}
+                  key={product.id}
                 />
               ))}
             </CategoryListings>
@@ -155,7 +155,7 @@ export default function Category() {
           )}
         </>
       ) : (
-        <p>No listings for {params.categoryName}</p>
+        <p>No products for {params.categoryName}</p>
       )}
     </CategoryWrapper>
   );

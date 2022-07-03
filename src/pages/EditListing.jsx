@@ -132,7 +132,7 @@ const EditListingButton = styled(FormButton)`
 
 export default function EditListing() {
   const [loading, setLoading] = useState(false);
-  const [listing, setListing] = useState(null);
+  const [product, setProduct] = useState(null);
   const [formData, setFormData] = useState({
     type: 'shoes',
     brand: '',
@@ -153,12 +153,12 @@ export default function EditListing() {
     setLoading(true);
 
     const fetchListing = async () => {
-      const docRef = doc(db, 'listings', params.listingId);
+      const docRef = doc(db, 'products', params.productId);
 
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        setListing(docSnap.data());
+        setProduct(docSnap.data());
         setFormData({ ...docSnap.data() });
         setLoading(false);
       } else {
@@ -167,7 +167,7 @@ export default function EditListing() {
       }
     };
     fetchListing();
-  }, [navigate, params.listingId]);
+  }, [navigate, params.productId]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -215,7 +215,7 @@ export default function EditListing() {
 
     delete formDataCopy.images;
 
-    const docRef = doc(db, 'listings', params.listingId);
+    const docRef = doc(db, 'products', params.productId);
 
     await updateDoc(docRef, formDataCopy);
 

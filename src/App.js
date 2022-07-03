@@ -61,15 +61,15 @@ function App() {
           <Route path='/sign-in' element={<Signin />}></Route>
           <Route path='/sign-up' element={<Signup />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
-          <Route path='/create-listing' element={<PrivateAdmin />}>
-            <Route path='/create-listing' element={<CreateListing />}></Route>
+          <Route path='/create-product' element={<PrivateAdmin />}>
+            <Route path='/create-product' element={<CreateListing />}></Route>
           </Route>
           <Route path='/create-news' element={<PrivateAdmin />}>
             <Route path='/create-news' element={<CreateNews />}></Route>
           </Route>
-          <Route path='/edit-listing/:listingId' element={<PrivateAdmin />}>
+          <Route path='/edit-product/:productId' element={<PrivateAdmin />}>
             <Route
-              path='/edit-listing/:listingId'
+              path='/edit-product/:productId'
               element={<EditListing />}
             ></Route>
           </Route>
@@ -77,7 +77,7 @@ function App() {
             <Route path='/edit-news/:newsId' element={<EditNews />}></Route>
           </Route>
           <Route
-            path='/category/:categoryName/:listingId'
+            path='/category/:categoryName/:productId'
             element={<Listing />}
           ></Route>
         </Routes>

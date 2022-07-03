@@ -9,6 +9,10 @@ const CategoryListing = styled.li`
   position: relative;
 `;
 
+const CategoryListingLink = styled(Link)`
+  display: contents;
+`;
+
 const CategoryListingImg = styled.img`
   width: 30%;
   height: 100px;
@@ -63,16 +67,13 @@ const CategoryListingPrice = styled.p`
   align-items: center;
 `;
 
-export default function ListingItem({ listing, id }) {
+export default function ListingItem({ product, id }) {
   return (
     <CategoryListing>
-      <Link
-        to={`/category/${listing.type}/${id}`}
-        className='categoryListingLink'
-      >
-        <CategoryListingImg src={listing.imgUrls[0]} alt={listing.name} />
+      <CategoryListingLink to={`/category/${product.type}/${id}`}>
+        <CategoryListingImg src={product.imgUrls[0]} alt={product.name} />
         <CategoryListingDetails>
-          {listing.inStock ? (
+          {product.inStock ? (
             <CategoryListingInStock>In Stock</CategoryListingInStock>
           ) : (
             <CategoryListingNotAvailable>
@@ -80,13 +81,13 @@ export default function ListingItem({ listing, id }) {
             </CategoryListingNotAvailable>
           )}
 
-          <CategoryListingName>{listing.brand}</CategoryListingName>
-          <CategoryListingInfoText>{listing.model}</CategoryListingInfoText>
+          <CategoryListingName>{product.brand}</CategoryListingName>
+          <CategoryListingInfoText>{product.model}</CategoryListingInfoText>
           <CategoryListingPrice>
-            {listing.offer ? listing.discountPrice : listing.price}$
+            {product.isOffer ? product.discountPrice : product.price}$
           </CategoryListingPrice>
         </CategoryListingDetails>
-      </Link>
+      </CategoryListingLink>
     </CategoryListing>
   );
 }

@@ -193,7 +193,7 @@ export default function CreateListing() {
 
     delete formDataCopy.images;
 
-    const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
+    const docRef = await addDoc(collection(db, 'products'), formDataCopy);
 
     setLoading(false);
 

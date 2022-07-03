@@ -96,8 +96,31 @@ const ListingDetailsListItem = styled.li`
   margin-right: 0.3rem;
 `;
 
+const FormButton = styled.button`
+  padding: 0.9rem 3rem;
+  background-color: #ffffff;
+  font-weight: 600;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.5rem 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AddToCartButton = styled(FormButton)`
+  cursor: pointer;
+  background: #00cc66;
+  padding: 0.85rem 2rem;
+  color: #ffffff;
+  font-size: 1.25rem;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 2rem;
+`;
+
 export default function Listing() {
-  const [listing, setListing] = useState(null);
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [shareLink, setShareLink] = useState(null);
 
@@ -107,28 +130,28 @@ export default function Listing() {
 
   useEffect(() => {
     const fetchListing = async () => {
-      const docRef = doc(db, 'listings', params.listingId);
+      const docRef = doc(db, 'products', params.productId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         // console.log(docSnap.data());
-        setListing(docSnap.data());
+        setProduct(docSnap.data());
         setLoading(false);
       }
     };
     fetchListing();
-  }, [navigate, params.listingId]);
+  }, [navigate, params.productId]);
 
   const onDelete = async () => {
     if (
       window.confirm(
-        `Are you sure you want to delete listing: ${listing.brand} - ${listing.model}?`
+        `Are you sure you want to delete product: ${product.brand} - ${product.model}?`
       )
     ) {
-      await deleteDoc(doc(db, 'listings', params.listingId));
+      await deleteDoc(doc(db, 'products', params.productId));
       toast.success('Listing deleted');
     }
-    navigate(`/category/${listing.type}`);
+    navigate(`/category/${product.type}`);
   };
 
   if (loading) {
@@ -143,11 +166,11 @@ export default function Listing() {
         pagination
         slidesPerView={1}
       >
-        {listing.imgUrls.map((img, index) => (
+        {product.imgUrls.map((img, index) => (
           <SwiperSlide key={index}>
             <div
               style={{
-                background: `url(${listing.imgUrls[index]}) center no-repeat`,
+                background: `url(${product.imgUrls[index]}) center no-repeat`,
                 backgroundSize: 'cover',
               }}
               className='swiper-slide'
@@ -160,7 +183,7 @@ export default function Listing() {
       auth.currentUser.metadata.createdAt === '1656428823385' ? (
         <ListingIconDiv>
           <ListingIcon
-            onClick={() => navigate(`/edit-listing/${params.listingId}`)}
+            onClick={() => navigate(`/edit-product/${params.productId}`)}
           >
             <img src={editIcon} alt='edit' />
           </ListingIcon>
@@ -186,35 +209,35 @@ export default function Listing() {
       {shareLink && <LinkCopied>Link Copied!</LinkCopied>}
       <ListingDetails>
         <ListingName>
-          {listing.brand} - ${' '}
-          {listing.offer ? listing.discountPrice : listing.price}
+          {product.brand} - ${' '}
+          {product.isOffer ? product.discountPrice : product.price}
         </ListingName>
-        {listing.inStock ? (
+        {product.inStock ? (
           <ListingInStock>In Stock</ListingInStock>
         ) : (
           <ListingNotAvailable>Not Available</ListingNotAvailable>
         )}
 
-        {listing.offer && (
+        {product.isOffer && (
           <DiscountPrice>
-            - ${listing.price - listing.discountPrice}
+            - ${product.price - product.discountPrice}
           </DiscountPrice>
         )}
 
         <ListingDetailsList>
-          <ListingDetailsListItem>{listing.model}</ListingDetailsListItem>
-          <ListingDetailsListItem>{listing.description}</ListingDetailsListItem>
-          {/* <ul className='listingDetailsListSize'>
-            {listing.size.map((size) => (
+          <ListingDetailsListItem>{product.model}</ListingDetailsListItem>
+          <ListingDetailsListItem>{product.description}</ListingDetailsListItem>
+          {/* <ul className='productDetailsListSize'>
+            {product.size.map((size) => (
               <li key={size}>{size}</li>
             ))}
           </ul> */}
         </ListingDetailsList>
 
-        {listing.inStock && auth.currentUser && (
-          <Link to='/cart' className='primaryButton'>
+        {product.inStock && auth.currentUser && (
+          <AddToCartButton type='button' onClick={() => navigate('/cart')}>
             Add To Cart
-          </Link>
+          </AddToCartButton>
         )}
       </ListingDetails>
     </main>
