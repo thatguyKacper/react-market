@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import Spinner from '../component/Spinner';
 import ListingItem from './ListingItem';
 import styled from 'styled-components';
+import { fetchCollection } from '../helpers/fetch-helpers';
 
 const CategoryWrapper = styled.div`
   margin: 1rem;
@@ -53,46 +54,20 @@ const LoadMore = styled.p`
 `;
 
 export default function Category() {
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState();
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
   const params = useParams();
 
   useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const productsRef = collection(db, 'products');
+    const fetch = async () => {
+      const products = await fetchCollection(params.categoryName);
 
-        const q = query(
-          productsRef,
-          where('type', '==', params.categoryName),
-          orderBy('timestamp', 'desc'),
-          limit(10)
-        );
-
-        const querySnap = await getDocs(q);
-
-        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
-        setLastFetchedListing(lastVisible);
-
-        let products = [];
-
-        querySnap.forEach((doc) => {
-          // console.log(doc.data());
-          return products.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-
-        setProducts(products);
-        setLoading(false);
-      } catch (error) {
-        toast.error('Could not fetch products');
-      }
+      setProducts(products);
+      setLoading(false);
     };
-    fetchListings();
+    fetch();
   }, [params.categoryName]);
 
   const onFetchMoreListings = async () => {

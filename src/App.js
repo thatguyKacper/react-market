@@ -16,6 +16,8 @@ import CreateNews from './pages/CreateNews';
 import EditListing from './pages/EditListing';
 import EditNews from './pages/EditNews';
 import { createGlobalStyle } from 'styled-components';
+import Cart from './pages/Cart';
+import { CartProvider } from './context/CartContext';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -49,41 +51,47 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <Router>
-        <Routes>
-          <Route path='/' element={<Explore />}></Route>
-          <Route path='/category/:categoryName' element={<Category />}></Route>
-          <Route path='/offers' element={<Offers />}></Route>
-          <Route path='/profile' element={<PrivateProfile />}>
-            <Route path='/profile' element={<Profile />}></Route>
-          </Route>
-          <Route path='/sign-in' element={<Signin />}></Route>
-          <Route path='/sign-up' element={<Signup />}></Route>
-          <Route path='/forgot-password' element={<ForgotPassword />}></Route>
-          <Route path='/create-product' element={<PrivateAdmin />}>
-            <Route path='/create-product' element={<CreateListing />}></Route>
-          </Route>
-          <Route path='/create-news' element={<PrivateAdmin />}>
-            <Route path='/create-news' element={<CreateNews />}></Route>
-          </Route>
-          <Route path='/edit-product/:productId' element={<PrivateAdmin />}>
+      <CartProvider>
+        <GlobalStyle />
+        <Router>
+          <Routes>
+            <Route path='/' element={<Explore />}></Route>
             <Route
-              path='/edit-product/:productId'
-              element={<EditListing />}
+              path='/category/:categoryName'
+              element={<Category />}
             ></Route>
-          </Route>
-          <Route path='/edit-news/:newsId' element={<PrivateAdmin />}>
-            <Route path='/edit-news/:newsId' element={<EditNews />}></Route>
-          </Route>
-          <Route
-            path='/category/:categoryName/:productId'
-            element={<Listing />}
-          ></Route>
-        </Routes>
-        <Navbar />
-      </Router>
-      <ToastContainer />
+            <Route path='/offers' element={<Offers />}></Route>
+            <Route path='/profile' element={<PrivateProfile />}>
+              <Route path='/profile' element={<Profile />}></Route>
+            </Route>
+            <Route path='/sign-in' element={<Signin />}></Route>
+            <Route path='/sign-up' element={<Signup />}></Route>
+            <Route path='/forgot-password' element={<ForgotPassword />}></Route>
+            <Route path='/create-product' element={<PrivateAdmin />}>
+              <Route path='/create-product' element={<CreateListing />}></Route>
+            </Route>
+            <Route path='/create-news' element={<PrivateAdmin />}>
+              <Route path='/create-news' element={<CreateNews />}></Route>
+            </Route>
+            <Route path='/edit-product/:productId' element={<PrivateAdmin />}>
+              <Route
+                path='/edit-product/:productId'
+                element={<EditListing />}
+              ></Route>
+            </Route>
+            <Route path='/edit-news/:newsId' element={<PrivateAdmin />}>
+              <Route path='/edit-news/:newsId' element={<EditNews />}></Route>
+            </Route>
+            <Route
+              path='/category/:categoryName/:productId'
+              element={<Listing />}
+            ></Route>
+            <Route path='/cart' element={<Cart />}></Route>
+          </Routes>
+          <Navbar />
+        </Router>
+        <ToastContainer />
+      </CartProvider>
     </>
   );
 }

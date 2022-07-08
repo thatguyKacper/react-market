@@ -213,7 +213,7 @@ export default function Profile() {
 
         {auth.currentUser.metadata.createdAt === '1656428823385' ? (
           <>
-            <CreateListing to='/create-listing'>
+            <CreateListing to='/create-product'>
               <img src={homeIcon} alt='home' />
               <p>Create listing</p>
               <img src={arrowRight} alt='arrow right' />

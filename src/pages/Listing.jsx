@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import editIcon from '../assets/svg/editIcon.svg';
 import deleteIcon from '../assets/svg/deleteIcon.svg';
 import styled from 'styled-components';
+import CartContex from '../context/CartContext';
 
 const ListingIconDiv = styled.div`
   cursor: pointer;
@@ -124,6 +125,8 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [shareLink, setShareLink] = useState(null);
 
+  const [addToCart, setAddToCart] = useContext(CartContex);
+
   const navigate = useNavigate();
   const params = useParams();
   const auth = getAuth();
@@ -152,6 +155,11 @@ export default function Listing() {
       toast.success('Listing deleted');
     }
     navigate(`/category/${product.type}`);
+  };
+
+  const handleCart = async () => {
+    setAddToCart([...addToCart, { product, id: params.productId }]);
+    navigate('/cart');
   };
 
   if (loading) {
@@ -227,15 +235,10 @@ export default function Listing() {
         <ListingDetailsList>
           <ListingDetailsListItem>{product.model}</ListingDetailsListItem>
           <ListingDetailsListItem>{product.description}</ListingDetailsListItem>
-          {/* <ul className='productDetailsListSize'>
-            {product.size.map((size) => (
-              <li key={size}>{size}</li>
-            ))}
-          </ul> */}
         </ListingDetailsList>
 
         {product.inStock && auth.currentUser && (
-          <AddToCartButton type='button' onClick={() => navigate('/cart')}>
+          <AddToCartButton type='button' onClick={handleCart}>
             Add To Cart
           </AddToCartButton>
         )}
