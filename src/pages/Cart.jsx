@@ -1,9 +1,10 @@
-import { useState, useContext } from 'react';
-import Spinner from '../component/Spinner';
+import { useContext } from 'react';
+// import Spinner from '../component/Spinner';
 import ListingItem from './ListingItem';
 import styled from 'styled-components';
 import CartContex from '../context/CartContext';
 import deleteIcon from '../assets/svg/deleteIcon.svg';
+import useCart from '../hooks/useCart';
 
 const CategoryWrapper = styled.div`
   margin: 1rem;
@@ -19,6 +20,15 @@ const PageHeader = styled.p`
   font-weight: 800;
 `;
 
+const CartListings = styled.ul`
+  padding: 0;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
 const ListingIcon = styled.div`
   background-color: #ffffff;
   border-radius: 50%;
@@ -31,6 +41,7 @@ const ListingIcon = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+  cursor: pointer;
 `;
 
 const ListingItemDiv = styled.div`
@@ -38,12 +49,10 @@ const ListingItemDiv = styled.div`
 `;
 
 export default function Cart() {
-  const [loading, setLoading] = useState(false);
-  const [addToCart, setAddToCart] = useContext(CartContex);
+  // const [loading, setLoading] = useState(false);
+  const [cart] = useContext(CartContex);
 
-  // const onDelete = (index) => {
-  //   setAddToCart([...addToCart.slice(0, index), ...addToCart.slice(index + 1)]);
-  // };
+  const { removeFromOrder } = useCart({ cart });
 
   return (
     <CategoryWrapper>
@@ -52,18 +61,24 @@ export default function Cart() {
       </header>
 
       <main>
-        {addToCart ? (
-          addToCart.map((product, index) => (
-            <ListingItemDiv key={index}>
-              <ListingItem product={product.product} id={product.id} />
-              <ListingIcon>
-                <img src={deleteIcon} alt='delete' />
-              </ListingIcon>
-            </ListingItemDiv>
-          ))
-        ) : (
-          <></>
-        )}
+        <CartListings>
+          {cart ? (
+            cart.map((product, index) => (
+              <ListingItemDiv key={index}>
+                <ListingItem product={product.product} id={product.id} />
+                <ListingIcon>
+                  <img
+                    src={deleteIcon}
+                    alt='delete'
+                    onClick={() => removeFromOrder(index)}
+                  />
+                </ListingIcon>
+              </ListingItemDiv>
+            ))
+          ) : (
+            <p>Nothing in cart </p>
+          )}
+        </CartListings>
       </main>
     </CategoryWrapper>
   );

@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as OfferIcon } from '../assets/svg/offerIcon.svg';
 import { ReactComponent as ExploreIcon } from '../assets/svg/exploreIcon.svg';
 import { ReactComponent as PersonOutlineIcon } from '../assets/svg/personOutlineIcon.svg';
+import { ReactComponent as Cart } from '../assets/svg/cartIcon.svg';
 import styled from 'styled-components';
 
 const NavbarFooter = styled.footer`
@@ -105,6 +106,18 @@ export default function Navbar() {
               <NavbarListItemNameActive>Profile</NavbarListItemNameActive>
             ) : (
               <NavbarListItemName>Profile</NavbarListItemName>
+            )}
+          </NavbarListItem>
+          <NavbarListItem onClick={() => navigate('/cart')}>
+            <Cart
+              fill={isActive('/cart') ? '#2c2c2c' : '#8f8f8f'}
+              width='36px'
+              height='36px'
+            />
+            {isActive('/cart') ? (
+              <NavbarListItemNameActive>Cart</NavbarListItemNameActive>
+            ) : (
+              <NavbarListItemName>Cart</NavbarListItemName>
             )}
           </NavbarListItem>
         </NavbarListItems>

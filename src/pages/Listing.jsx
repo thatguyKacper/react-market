@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import editIcon from '../assets/svg/editIcon.svg';
 import deleteIcon from '../assets/svg/deleteIcon.svg';
 import styled from 'styled-components';
-import CartContex from '../context/CartContext';
+import useCart from '../hooks/useCart';
 
 const ListingIconDiv = styled.div`
   cursor: pointer;
@@ -125,7 +125,7 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [shareLink, setShareLink] = useState(null);
 
-  const [addToCart, setAddToCart] = useContext(CartContex);
+  const { addToOrder } = useCart({ product });
 
   const navigate = useNavigate();
   const params = useParams();
@@ -157,8 +157,15 @@ export default function Listing() {
     navigate(`/category/${product.type}`);
   };
 
+  // const handleCart = async () => {
+  //   setAddToCart([...addToCart, { product, id: params.productId }]);
+  //   navigate('/cart');
+  // };
+
   const handleCart = async () => {
-    setAddToCart([...addToCart, { product, id: params.productId }]);
+    const id = params.productId;
+
+    addToOrder({ product, id });
     navigate('/cart');
   };
 
